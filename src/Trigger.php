@@ -456,7 +456,9 @@ class Trigger
     public function getDatabases()
     {
         $databases = array_keys($this->getEvents());
-        $databases = array_filter($databases, function ($item) {return $item != '*';});
+        $databases = array_filter($databases, function ($item) {
+            return $item != '*';
+        });
 
         return array_values($databases);
     }
@@ -470,7 +472,9 @@ class Trigger
 
         collect($this->getEvents())->each(function ($listeners, $database) use (&$tables) {
             if (is_array($listeners) && !empty($listeners)) {
-                $tables = array_merge($tables, array_filter(array_keys($listeners), function ($item) {return $item != '*';}));
+                $tables = array_merge($tables, array_filter(array_keys($listeners), function ($item) {
+                    return $item != '*';
+                }));
             }
         });
 

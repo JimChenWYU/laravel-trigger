@@ -35,6 +35,5 @@ class TerminateCommand extends Command
             $trigger->reset();
             $this->info('Replication position reseted.');
         }
-
     }
 }

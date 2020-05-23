@@ -71,7 +71,6 @@ class StartCommand extends Command
             }
 
             $trigger->start();
-
         } catch (MySQLReplicationException $e) {
             $this->error($e->getMessage());
 

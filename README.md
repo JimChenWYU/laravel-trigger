@@ -1,8 +1,8 @@
 # laravel-trigger
 
-[![Latest Stable Version](https://poser.pugx.org/huangdijia/laravel-trigger/version.png)](https://packagist.org/packages/huangdijia/laravel-trigger)
-[![Total Downloads](https://poser.pugx.org/huangdijia/laravel-trigger/d/total.png)](https://packagist.org/packages/huangdijia/laravel-trigger)
-[![GitHub license](https://img.shields.io/github/license/huangdijia/laravel-trigger)](https://github.com/huangdijia/laravel-trigger)
+[![Latest Stable Version](https://poser.pugx.org/jimchen/laravel-trigger/version.png)](https://packagist.org/packages/jimchen/laravel-trigger)
+[![Total Downloads](https://poser.pugx.org/jimchen/laravel-trigger/d/total.png)](https://packagist.org/packages/jimchen/laravel-trigger)
+[![GitHub license](https://img.shields.io/github/license/JimChenWYU/laravel-trigger)](https://github.com/JimChenWYU/laravel-trigger)
 
 Subscribe MySQL events like jQuery, base on [php-mysql-replication](https://github.com/krowinski/php-mysql-replication)
 
@@ -38,7 +38,7 @@ GRANT SELECT ON `dbName`.* TO 'user'@'host';
 install
 
 ~~~bash
-composer require huangdijia/laravel-trigger
+composer require jimchen/laravel-trigger
 ~~~
 
 publish config
@@ -52,7 +52,7 @@ php artisan vendor:publish --provider="Huangdijia\Trigger\TriggerServiceProvider
 install
 
 ~~~bash
-composer require huangdijia/laravel-trigger
+composer require jimchen/laravel-trigger
 ~~~
 
 edit `bootstrap/app.php` add:
