@@ -44,7 +44,7 @@ composer require jimchen/laravel-trigger
 publish config
 
 ~~~bash
-php artisan vendor:publish --provider="Huangdijia\Trigger\TriggerServiceProvider"
+php artisan vendor:publish --provider="JimChen\Trigger\TriggerServiceProvider"
 ~~~
 
 ### Lumen
