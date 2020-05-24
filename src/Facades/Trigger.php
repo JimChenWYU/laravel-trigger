@@ -1,15 +1,18 @@
 <?php
 
-namespace Huangdijia\Trigger\Facades;
+namespace JimChen\Trigger\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use MySQLReplication\BinLog\BinLogCurrent;
+use MySQLReplication\Config\Config;
+use MySQLReplication\Event\DTO\EventDTO;
 
 /**
- * @see \Huangdijia\Trigger\Manager
- * @method static \Huangdijia\Trigger\Trigger replication(?string $name = null)
+ * @see \JimChen\Trigger\Manager
+ * @method static \JimChen\Trigger\Trigger replication(?string $name = null)
  * @method static array replications()
- * @see Huangdijia\Trigger\Trigger
- * @method static \MySQLReplication\Config\Config configure()
+ * @see \JimChen\Trigger\Trigger
+ * @method static Config configure()
  * @method static array getConfig()
  * @method static array getSubscribers()
  * @method static void loadRoutes()
@@ -18,7 +21,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static boolean isTerminated()
  * @method static void heartbeat(EventDTO $event)
  * @method static void rememberCurrent(BinLogCurrent $binLogCurrent)
- * @method static \MySQLReplication\BinLog\BinLogCurrent getCurrent()
+ * @method static BinLogCurrent getCurrent()
  * @method static void clearCurrent()
  * @method static void on(string $table, $eventType, $action = null)
  * @method static void dispatch(EventDTO $event)

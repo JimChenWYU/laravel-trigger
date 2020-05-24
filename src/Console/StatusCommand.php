@@ -1,19 +1,19 @@
 <?php
 
-namespace Huangdijia\Trigger\Console;
+namespace JimChen\Trigger\Console;
 
-use Huangdijia\Trigger\Facades\Trigger;
 use Illuminate\Console\Command;
+use JimChen\Trigger\Facades\Trigger;
 
 class StatusCommand extends Command
 {
-    protected $signature   = 'trigger:status {--R|replication=default : replication}';
+    protected $signature = 'trigger:status {--R|replication=default : replication}';
     protected $description = 'Install config and routes';
 
     public function handle()
     {
-        $replication   = $this->option('replication');
-        $trigger       = Trigger::replication($replication);
+        $replication = $this->option('replication');
+        $trigger = Trigger::replication($replication);
         $binLogCurrent = $trigger->getCurrent();
 
         if (is_null($binLogCurrent)) {

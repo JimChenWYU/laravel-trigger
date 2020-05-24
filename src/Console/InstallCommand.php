@@ -1,12 +1,12 @@
 <?php
 
-namespace Huangdijia\Trigger\Console;
+namespace JimChen\Trigger\Console;
 
 use Illuminate\Console\Command;
 
 class InstallCommand extends Command
 {
-    protected $signature   = 'trigger:install {--force}';
+    protected $signature = 'trigger:install {--force}';
     protected $description = 'Install config and routes';
 
     public function handle()
@@ -17,9 +17,10 @@ class InstallCommand extends Command
             __DIR__ . '/../../config/trigger.php' => app()->basePath('config/trigger.php'),
             __DIR__ . '/../../routes/trigger.php' => app()->basePath('routes/trigger.php'),
         ])
-            ->reject(function ($target, $source) use ($force) {
+            ->reject(function ($target) use ($force) {
                 if (!$force && file_exists($target)) {
                     $this->warn("{$target} already exists!");
+
                     return true;
                 }
 

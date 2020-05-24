@@ -1,17 +1,21 @@
 <?php
 
-namespace Huangdijia\Trigger;
+namespace JimChen\Trigger;
 
+use Closure;
 use Exception;
-use Huangdijia\Trigger\EventSubscriber;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use JimChen\Trigger\Subscribers\Heartbeat;
+use JimChen\Trigger\Subscribers\Terminate;
 use MySQLReplication\BinLog\BinLogCurrent;
+use MySQLReplication\Config\Config;
 use MySQLReplication\Config\ConfigBuilder;
 use MySQLReplication\Event\DTO\EventDTO;
 use MySQLReplication\MySQLReplicationFactory;
+use Psr\SimpleCache\CacheInterface;
 use ReflectionException;
 use ReflectionMethod;
 
@@ -23,7 +27,7 @@ class Trigger
     /**
      * Cache
      *
-     * @var \Illuminate\Support\Facades\Cache
+     * @var CacheInterface
      */
     protected $cache;
     protected $events = [];
@@ -32,19 +36,19 @@ class Trigger
     protected $resetCacheKey;
     protected $restartCacheKey;
     protected $defaultSubscribers = [
-        \Huangdijia\Trigger\Subscribers\Trigger::class,
-        \Huangdijia\Trigger\Subscribers\Terminate::class,
-        \Huangdijia\Trigger\Subscribers\Heartbeat::class,
+        Subscribers\Trigger::class,
+        Terminate::class,
+        Heartbeat::class,
     ];
 
-    public function __construct(string $name = 'default', array $config)
+    public function __construct(string $name, array $config)
     {
-        $this->name     = $name;
-        $this->config   = $config;
+        $this->name = $name;
+        $this->config = $config;
         $this->bootTime = time();
 
-        $this->resetCacheKey       = sprintf('triggers:%s:reset', $name);
-        $this->restartCacheKey     = sprintf('triggers:%s:restart', $name);
+        $this->resetCacheKey = sprintf('triggers:%s:reset', $name);
+        $this->restartCacheKey = sprintf('triggers:%s:restart', $name);
         $this->replicationCacheKey = sprintf('triggers:%s:replication', $name);
 
         $this->cache = Cache::store();
@@ -57,14 +61,14 @@ class Trigger
     public function detectDatabasesAndTables()
     {
         $this->config['databases'] = $this->getDatabases();
-        $this->config['tables']    = $this->getTables();
+        $this->config['tables'] = $this->getTables();
     }
 
     /**
      * Get config
      *
      * @param string $key
-     * @param mixed $default
+     * @param mixed  $default
      *
      * @return array|mixed
      */
@@ -93,7 +97,7 @@ class Trigger
     /**
      * Builder config
      *
-     * @return \MySQLReplication\Config\Config
+     * @return Config
      */
     public function configure()
     {
@@ -151,7 +155,7 @@ class Trigger
             ->each(function ($subscriber) use ($binLogStream) {
                 $binLogStream->registerSubscriber(new $subscriber($this));
             })
-            ->tap(function ($subscribers) use ($binLogStream) {
+            ->tap(function () use ($binLogStream) {
                 $binLogStream->run();
             });
     }
@@ -197,7 +201,7 @@ class Trigger
     /**
      * Remember current by heartbeat
      *
-     * @return \MySQLReplication\BinLog\BinLogCurrent
+     * @return BinLogCurrent
      */
     public function heartbeat(EventDTO $event)
     {
@@ -207,7 +211,7 @@ class Trigger
     /**
      * Remember current
      *
-     * @param \MySQLReplication\BinLog\BinLogCurrent $binLogCurrent
+     * @param BinLogCurrent $binLogCurrent
      * @return void
      */
     public function rememberCurrent(BinLogCurrent $binLogCurrent)
@@ -218,7 +222,7 @@ class Trigger
     /**
      * Get current
      *
-     * @return \MySQLReplication\BinLog\BinLogCurrent|null
+     * @return BinLogCurrent|null
      */
     public function getCurrent()
     {
@@ -250,8 +254,8 @@ class Trigger
     /**
      * Bind events
      *
-     * @param string $table
-     * @param string|array $eventType
+     * @param string                        $table
+     * @param string|array                  $eventType
      * @param Closure|array|string|callable $action
      * @return void
      */
@@ -266,6 +270,7 @@ class Trigger
                 ->each(function ($table) use ($eventType, $action) {
                     $this->on($table, $eventType, $action);
                 });
+
             return;
         }
 
@@ -314,7 +319,7 @@ class Trigger
         $key = sprintf('%s.%s', $table, $eventType);
 
         // append to actions
-        $actions   = Arr::get($this->events, $key) ?: [];
+        $actions = Arr::get($this->events, $key) ?: [];
         $actions[] = $action;
 
         // restore to array
@@ -326,17 +331,17 @@ class Trigger
     /**
      * Fire events
      *
-     * @param \MySQLReplication\Event\DTO\EventDTO $event
+     * @param EventDTO $event
      * @return void
      */
     public function dispatch(EventDTO $event)
     {
-        $events    = [];
+        $events = [];
         $eventType = $event->getType();
 
         if (is_callable([$event, 'getTableMap'])) {
             $database = $event->getTableMap()->getDatabase();
-            $table    = $event->getTableMap()->getTable();
+            $table = $event->getTableMap()->getTable();
             $events[] = sprintf('%s.%s.%s', $database, $table, $eventType);
             $events[] = sprintf('%s.%s.%s', $database, $table, '*');
             $events[] = sprintf('%s.%s.%s', $database, '*', $eventType);
@@ -353,8 +358,8 @@ class Trigger
     /**
      * Fire evnets
      *
-     * @param mixed $events
-     * @param \MySQLReplication\Event\DTO\EventDTO $event
+     * @param mixed    $events
+     * @param EventDTO $event
      * @return void
      */
     public function fire($events, EventDTO $event = null)
@@ -383,7 +388,7 @@ class Trigger
 
         // parse class from action
         $action = explode('@', $action);
-        $class  = $action[0];
+        $class = $action[0];
 
         // class is not exists
         if (!class_exists($class)) {
@@ -430,7 +435,7 @@ class Trigger
      * Execute action
      *
      * @param callable $action
-     * @param array $parameters
+     * @param array    $parameters
      * @return mixed
      */
     private function call(callable $action, array $parameters = [])

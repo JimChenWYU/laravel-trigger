@@ -1,6 +1,8 @@
 <?php
 
-namespace Huangdijia\Trigger;
+namespace JimChen\Trigger;
+
+use Exception;
 
 class Manager
 {
@@ -16,7 +18,7 @@ class Manager
      * Create new replication
      *
      * @param string|null $name
-     * @return \Huangdijia\Trigger\Trigger
+     * @return Trigger
      */
     public function replication(?string $name = null)
     {
@@ -27,7 +29,7 @@ class Manager
         }
 
         if (!isset($this->config['replications'][$name])) {
-            throw new \Exception("Config 'trigger.replications.{$name}' is undefined", 1);
+            throw new Exception("Config 'trigger.replications.{$name}' is undefined", 1);
         }
 
         $config = $this->config['replications'][$name];
@@ -56,7 +58,7 @@ class Manager
      * call
      *
      * @param string $method
-     * @param array $parameters
+     * @param array  $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

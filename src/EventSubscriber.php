@@ -1,6 +1,6 @@
 <?php
 
-namespace Huangdijia\Trigger;
+namespace JimChen\Trigger;
 
 use MySQLReplication\Event\EventSubscribers;
 

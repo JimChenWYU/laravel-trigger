@@ -1,12 +1,12 @@
 <?php
 
-namespace Huangdijia\Trigger\Console;
+namespace JimChen\Trigger\Console;
 
 use Closure;
-use Huangdijia\Trigger\Facades\Trigger;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
+use JimChen\Trigger\Facades\Trigger;
 
 class ListCommand extends Command
 {
@@ -22,6 +22,7 @@ class ListCommand extends Command
      * @var string
      */
     protected $description = 'List all trigger events';
+
     /**
      * Execute the console command.
      *
@@ -33,7 +34,10 @@ class ListCommand extends Command
 
         collect(Arr::dot($actions))
             ->transform(function ($action, $key) use ($actions) {
-                [$database, $table, $event, $num, $action] = explode('.', $key . '.' . $this->transformActionToString($action));
+                [$database, $table, $event, $num, $action] = explode(
+                    '.',
+                    $key . '.' . $this->transformActionToString($action)
+                );
 
                 $key = sprintf('%s.%s.%s.%s', $database, $table, $event, $num);
 

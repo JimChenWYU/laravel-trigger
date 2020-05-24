@@ -58,7 +58,7 @@ composer require jimchen/laravel-trigger
 edit `bootstrap/app.php` add:
 
 ~~~php
-$app->register(Huangdijia\Trigger\TriggerServiceProvider::class);
+$app->register(JimChen\Trigger\TriggerServiceProvider::class);
 ...
 $app->configure('trigger');
 ~~~
@@ -93,7 +93,7 @@ php artisan trigger:start [-R=xxx]
 <?php
 namespace App\Listeners;
 
-use Huangdijia\Trigger\EventSubscriber;
+use JimChen\Trigger\EventSubscriber;
 
 class ExampeSubscriber extends EventSubscriber
 {

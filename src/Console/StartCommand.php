@@ -1,9 +1,9 @@
 <?php
 
-namespace Huangdijia\Trigger\Console;
+namespace JimChen\Trigger\Console;
 
-use Huangdijia\Trigger\Facades\Trigger;
 use Illuminate\Console\Command;
+use JimChen\Trigger\Facades\Trigger;
 use MySQLReplication\Exception\MySQLReplicationException;
 
 class StartCommand extends Command
@@ -20,6 +20,7 @@ class StartCommand extends Command
      * @var string
      */
     protected $description = 'Start trigger service';
+
     /**
      * Execute the console command.
      *

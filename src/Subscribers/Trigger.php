@@ -1,8 +1,8 @@
 <?php
 
-namespace Huangdijia\Trigger\Subscribers;
+namespace JimChen\Trigger\Subscribers;
 
-use Huangdijia\Trigger\EventSubscriber;
+use JimChen\Trigger\EventSubscriber;
 use MySQLReplication\Event\DTO\EventDTO;
 
 class Trigger extends EventSubscriber

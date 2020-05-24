@@ -43,7 +43,7 @@ composer require jimchen/laravel-trigger
 发布配置
 
 ~~~bash
-php artisan vendor:publish --provider="Huangdijia\Trigger\TriggerServiceProvider"
+php artisan vendor:publish --provider="JimChen\Trigger\TriggerServiceProvider"
 ~~~
 
 ### Lumen
@@ -57,7 +57,7 @@ composer require jimchen/laravel-trigger
 编辑 `bootstrap/app.php`，注册服务及加载配置:
 
 ~~~php
-$app->register(Huangdijia\Trigger\TriggerServiceProvider::class);
+$app->register(JimChen\Trigger\TriggerServiceProvider::class);
 ...
 $app->configure('trigger');
 ~~~
@@ -92,7 +92,7 @@ php artisan trigger:start [-R=xxx]
 <?php
 namespace App\Listeners;
 
-use Huangdijia\Trigger\EventSubscriber;
+use JimChen\Trigger\EventSubscriber;
 
 class ExampeSubscriber extends EventSubscriber
 {

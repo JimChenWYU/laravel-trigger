@@ -1,6 +1,6 @@
 <?php
 
-namespace Huangdijia\Trigger;
+namespace JimChen\Trigger;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +16,7 @@ class TriggerServiceProvider extends ServiceProvider
         $this->configure();
         $this->registerCommands();
 
-        $this->app->singleton('trigger.manager', function ($app) {
+        $this->app->singleton('trigger.manager', function () {
             return new Manager(config('trigger'));
         });
     }

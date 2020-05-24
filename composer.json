@@ -28,13 +28,13 @@
         "files": [
         ],
         "psr-4": {
-            "Huangdijia\\Trigger\\": "src/"
+            "JimChen\\Trigger\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Huangdijia\\Trigger\\TriggerServiceProvider"
+                "JimChen\\Trigger\\TriggerServiceProvider"
             ]
         }
     }

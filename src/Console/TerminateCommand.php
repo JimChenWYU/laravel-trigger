@@ -1,9 +1,9 @@
 <?php
 
-namespace Huangdijia\Trigger\Console;
+namespace JimChen\Trigger\Console;
 
-use Huangdijia\Trigger\Facades\Trigger;
 use Illuminate\Console\Command;
+use JimChen\Trigger\Facades\Trigger;
 
 class TerminateCommand extends Command
 {
@@ -19,6 +19,7 @@ class TerminateCommand extends Command
      * @var string
      */
     protected $description = 'Terminate the process so it can be restarted';
+
     /**
      * Execute the console command.
      *
