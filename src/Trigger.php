@@ -232,7 +232,7 @@ class Trigger
             return null;
         }
 
-        $binLogCurrent = unserialize($binLogCache, null);
+        $binLogCurrent = unserialize($binLogCache);
 
         if (!$binLogCurrent) {
             return null;
