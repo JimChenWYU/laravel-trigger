@@ -201,7 +201,7 @@ class Trigger
     /**
      * Remember current by heartbeat
      *
-     * @return BinLogCurrent
+     * @return void
      */
     public function heartbeat(EventDTO $event)
     {
@@ -232,7 +232,7 @@ class Trigger
             return null;
         }
 
-        $binLogCurrent = unserialize($binLogCache);
+        $binLogCurrent = unserialize($binLogCache, null);
 
         if (!$binLogCurrent) {
             return null;
@@ -275,7 +275,7 @@ class Trigger
         }
 
         // * to *.*
-        if ($table == '*') {
+        if ($table === '*') {
             $table .= '.*';
         }
 
@@ -283,7 +283,7 @@ class Trigger
         $table = ltrim($table, '.');
         if (false === strpos($table, '.')) { // table to database.table
             $table = sprintf('%s.%s', ($this->config['databases'][0] ?? '*'), $table);
-        } elseif (substr($table, -1) == '.') { // database. to database.*
+        } elseif (substr($table, -1) === '.') { // database. to database.*
             $table .= '*';
         }
 
@@ -462,7 +462,7 @@ class Trigger
     {
         $databases = array_keys($this->getEvents());
         $databases = array_filter($databases, function ($item) {
-            return $item != '*';
+            return $item !== '*';
         });
 
         return array_values($databases);
@@ -475,10 +475,10 @@ class Trigger
     {
         $tables = [];
 
-        collect($this->getEvents())->each(function ($listeners, $database) use (&$tables) {
+        collect($this->getEvents())->each(function ($listeners) use (&$tables) {
             if (is_array($listeners) && !empty($listeners)) {
                 $tables = array_merge($tables, array_filter(array_keys($listeners), function ($item) {
-                    return $item != '*';
+                    return $item !== '*';
                 }));
             }
         });
